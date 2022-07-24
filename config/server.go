@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,8 +21,9 @@ func init() {
 }
 
 // welcome page to check server is runing
-func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
-
+func helloWorldHandler(res http.ResponseWriter, req *http.Request) {
+	res.Header().Add("content-type", "application/json")
+	json.NewEncoder(res).Encode("Server is runing")
 }
 func Start() {
 	// get port from env file
