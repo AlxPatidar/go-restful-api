@@ -49,7 +49,12 @@ func (userController UserController) GetUser(res http.ResponseWriter, req *http.
 func (userController UserController) CreateUser(res http.ResponseWriter, req *http.Request) {
 	fmt.Println("Create user")
 	res.Header().Add("Content-Type", "application/json")
-	user := models.CreateUser(userController.client, primitive.M{})
+	if req.Body == nil {
+		json.NewEncoder(res).Encode("Please send some data.")
+	}
+	var newUser models.User
+	_ = json.NewDecoder(req.Body).Decode(&newUser)
+	user := models.CreateUser(userController.client, newUser)
 	if user == false {
 		json.NewEncoder(res).Encode("Invalid user data provided.")
 	}

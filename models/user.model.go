@@ -9,19 +9,31 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type Company struct {
+	Name        string `json:"name,omitempty" bson:"name,omitempty"`
+	CatchPhrase string `json:"catchPhrase,omitempty" bson:"catchPhrase,omitempty"`
+	BS          string `json:"bs,omitempty" bson:"bs,omitempty"`
+}
+type Address struct {
+	Street  string `json:"street,omitempty" bson:"street,omitempty"`
+	Suite   string `json:"suite,omitempty" bson:"suite,omitempty"`
+	City    string `json:"city,omitempty" bson:"city,omitempty"`
+	Zipcode string `json:"zipcode,omitempty" bson:"zipcode,omitempty"`
+}
 type User struct {
 	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	Name      string             `json:"name,omitempty" bson:"name,omitempty"`
 	Email     string             `json:"email,omitempty" bson:"emai,omitempty"`
-	IsActive  bool               `json:"-" bson:"isActive"`
 	Phone     string             `json:"phone,omitempty" bson:"phone,omitempty"`
 	Website   string             `json:"website,omitempty" bson:"website,omitempty"`
-	IsDeleted bool               `json:"-" bson:"isDeleted"`
+	IsDeleted bool               `json:"-" bson:"isDeleted,omitempty"`
+	Address   Address            `json:"address,omitempty" bson:"address,omitempty"`
+	Company   Company            `json:"company,omitempty" bson:"company,omitempty"`
 }
 
 // get all user list item from user collection
 func Users(client *mongo.Collection) []primitive.M {
-	cursors, error := client.Find(context.Background(), bson.M{"isDelete": false})
+	cursors, error := client.Find(context.Background(), bson.M{"isDeleted": false})
 	if error != nil {
 		log.Fatal(error)
 	}
@@ -49,7 +61,7 @@ func UserOne(client *mongo.Collection, userId primitive.ObjectID) primitive.M {
 	return result
 }
 
-func CreateUser(client *mongo.Collection, user primitive.M) bool {
+func CreateUser(client *mongo.Collection, user User) bool {
 	_, error := client.InsertOne(context.Background(), user)
 	if error != nil {
 		return false
