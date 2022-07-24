@@ -20,7 +20,7 @@ func Router() *mux.Router {
 	router := mux.NewRouter()
 	// add router path
 	router.HandleFunc("/", helloWorldHandler)
-	client := config.GetDatabase()
+	client := config.GetDatabase("users")
 	userController := controllers.NewUserController(client)
 	router.HandleFunc("/api/users", userController.GetAllUsers).Methods("GET")
 	router.HandleFunc("/api/user/{userId}", userController.GetUser).Methods("GET")

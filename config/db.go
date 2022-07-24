@@ -57,6 +57,13 @@ func Init() {
 	ping(client, ctx)
 }
 
-func GetDatabase() *mongo.Database {
-	return client.Database("test")
+func GetDatabase(col string) *mongo.Collection {
+	mongoUrl := os.Getenv("MONGO_URL")
+	dbName := os.Getenv("DB_NAME")
+	// Get Client, Context, CancelFunc and err from connect method.
+	client, _, _, err := connect(mongoUrl)
+	if err != nil {
+		panic(err)
+	}
+	return client.Database(dbName).Collection(col)
 }
