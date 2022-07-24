@@ -3,11 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/AlxPatidar/go-restful-api/config"
+	"github.com/AlxPatidar/go-restful-api/app"
 )
 
 func main() {
 	fmt.Println("Go Mongo Restful API")
-	config.Init()
-	config.Start()
+	app.Start()
 }

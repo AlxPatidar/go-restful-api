@@ -1,13 +1,12 @@
-package config
+package app
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/gorilla/mux"
+	"github.com/AlxPatidar/go-restful-api/router"
 	"github.com/joho/godotenv"
 )
 
@@ -20,19 +19,11 @@ func init() {
 	}
 }
 
-// welcome page to check server is runing
-func helloWorldHandler(res http.ResponseWriter, req *http.Request) {
-	res.Header().Add("content-type", "application/json")
-	json.NewEncoder(res).Encode("Server is runing")
-}
 func Start() {
 	// get port from env file
 	port := os.Getenv("PORT")
 	fmt.Println("Go server is started on", port)
-	// create router using mux
-	router := mux.NewRouter()
-	// add router path
-	router.HandleFunc("/", helloWorldHandler)
+	router := router.Router()
 	// run server on env port
 	http.ListenAndServe(":"+port, router)
 }

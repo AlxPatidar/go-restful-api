@@ -56,3 +56,7 @@ func Init() {
 	// Ping mongoDB with Ping method
 	ping(client, ctx)
 }
+
+func GetDatabase() *mongo.Database {
+	return client.Database("test")
+}
